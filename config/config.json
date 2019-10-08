@@ -1,0 +1,24 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "training-delivery-process-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/trainingDeliveryProcess/TrainingDeliveryProcessWebPart.js",
+          "manifest": "./src/webparts/trainingDeliveryProcess/TrainingDeliveryProcessWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {
+    "bootstrap": {
+      "path": "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js",
+      "globalName": "bootstrap"
+    }
+  },
+  "localizedResources": {
+    "TrainingDeliveryProcessWebPartStrings": "lib/webparts/trainingDeliveryProcess/loc/{locale}.js",
+    "PropertyControlStrings": "node_modules/@pnp/spfx-property-controls/lib/loc/{locale}.js"
+  }
+}

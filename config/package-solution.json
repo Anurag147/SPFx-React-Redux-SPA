@@ -1,0 +1,13 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "training-webpart-react-client-side-solution",
+    "id": "be7436c2-a4f5-4fcf-b468-f27ea23bde6a",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "isDomainIsolated": false
+  },
+  "paths": {
+    "zippedPackage": "solution/training-webpart-react.sppkg"
+  }
+}
