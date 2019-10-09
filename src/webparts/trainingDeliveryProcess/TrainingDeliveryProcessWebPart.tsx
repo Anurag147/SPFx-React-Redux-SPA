@@ -35,7 +35,8 @@ export default class TrainingDeliveryProcessWebPart extends BaseClientSideWebPar
       <Provider store={this.store}>
         <Home context={this.context} 
         spHttpClient={this.context.spHttpClient} 
-        siteUrl= {this.context.pageContext.web.absoluteUrl}/>
+        siteUrl= {this.context.pageContext.web.absoluteUrl}
+        listName="Trainings"/>
       </Provider>
     );
     ReactDom.render(element, this.domElement);

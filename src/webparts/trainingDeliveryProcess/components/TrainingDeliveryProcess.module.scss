@@ -20,26 +20,17 @@
     margin-Top:20px;
  }
 
- .FocusDiv:focus{
-  background-color: #e1ffb8;
-  border: 1px solid #e1ffb8; 
-}
-
 Input:focus{
-background-color: #e1ffb8;
-border: 1px solid #e1ffb8;  
+background-color: #9dff52; 
 }
 
 TextArea:focus{
-  background-color: #e1ffb8;
-  border: 1px solid #e1ffb8;  
+  background-color: #9dff52;
   }
 
 .Feed:hover{
-background-color: #e0fffa !important;
+background-color: #ebfffc !important;
 }
-
-
   .Feed{
     cursor: pointer;
     display: inline-flexbox;

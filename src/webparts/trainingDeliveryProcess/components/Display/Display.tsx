@@ -9,17 +9,18 @@ import styles from '../TrainingDeliveryProcess.module.scss';
 
 export interface IStoreProps {
     items:IListItem[];
-    onFetchData: (spHttpClient:SPHttpClient,siteUrl:string) => {};
+    onFetchData: (spHttpClient:SPHttpClient,siteUrl:string,listName:string) => {};
     spHttpClient: SPHttpClient;  
     siteUrl: string;
     context:WebPartContext;
+    listName:string;
     onAddData: () => {}
   }
 
 class Display extends React.Component<IStoreProps,{}>{
 
     componentDidMount(){
-        this.props.onFetchData(this.props.spHttpClient,this.props.siteUrl);
+        this.props.onFetchData(this.props.spHttpClient,this.props.siteUrl,this.props.listName);
     }
 
     public render():React.ReactElement<IStoreProps>{
@@ -69,7 +70,7 @@ const mapStateToProps = (state:IApplicationState) => {
 }
 const mapDispatchToProps = (dispatch:any) => {
     return {
-        onFetchData: (spHttpClient:SPHttpClient,siteUrl:string) => {dispatch(initData(spHttpClient,siteUrl))},
+        onFetchData: (spHttpClient:SPHttpClient,siteUrl:string,listName:string) => {dispatch(initData(spHttpClient,siteUrl,listName))},
         onAddData: () => {dispatch(addData())}
     };
 }

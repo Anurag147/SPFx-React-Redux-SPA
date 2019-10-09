@@ -6,13 +6,15 @@ export interface IApplicationState{
     isAddFormEnabled:boolean;
     item:IListItem;
     isFormvalid:boolean;
+    isDateValid:boolean;
 }
 
 const initialState: IApplicationState = {
     items:[],
     isAddFormEnabled:false,
     item:{Title:"",Description:"",TrainingStatus:"Pending ",TrainingDate:null,Author:null},
-    isFormvalid:true
+    isFormvalid:true,
+    isDateValid:true
 };
 
 export const trainingReducer:Reducer<IApplicationState> = (state: IApplicationState = initialState, action:IAction) => {
@@ -58,6 +60,17 @@ export const trainingReducer:Reducer<IApplicationState> = (state: IApplicationSt
     if(action.type==actionTypes.SET_ERROR){
         let newState:IApplicationState = {...state};
         newState.isFormvalid=false;
+        return newState;
+    }
+    if(action.type==actionTypes.SET_DATE_STATE){
+        let newState:IApplicationState = {...state};
+        if(action.data){
+            newState.isDateValid=true
+        }
+        else{
+            newState.isDateValid=false;
+            newState.isFormvalid=false;
+        }
         return newState;
     }
     return state; 

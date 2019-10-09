@@ -16,7 +16,8 @@ export enum actionTypes{
     EVENT,
     ADD_SUCCESS,
     CANCEL,
-    SET_ERROR
+    SET_ERROR,
+    SET_DATE_STATE
 }
 
 export interface IAction{
@@ -35,6 +36,13 @@ export const setError = ():IAction => {
     return {
         type:actionTypes.SET_ERROR,
         data:null
+    };
+};
+
+export const setDateState = (data:boolean):IAction => {
+    return {
+        type:actionTypes.SET_DATE_STATE,
+        data:data
     };
 };
 
@@ -59,9 +67,9 @@ export const cancel = ():IAction => {
     };
 };
 
-export const initData = (spHttpClient: SPHttpClient, siteUrl:string):any => {
+export const initData = (spHttpClient: SPHttpClient, siteUrl:string,listName:string):any => {
     return dispatch => {
-        spHttpClient.get(`${siteUrl}/_api/web/lists/getbytitle('Trainings')/items?$select=Title,Description,TrainingStatus,TrainingDate,Author/Title&$expand=Author&$orderby=Created desc`,  
+        spHttpClient.get(`${siteUrl}/_api/web/lists/getbytitle('${listName}')/items?$select=Title,Description,TrainingStatus,TrainingDate,Author/Title&$expand=Author&$orderby=TrainingDate`,  
         SPHttpClient.configurations.v1,  
         {  
           headers: {  
@@ -86,11 +94,10 @@ export const postDataSuccess = ():IAction => {
             data:null
         };
 }
-export const postData = (spHttpClient: SPHttpClient, siteUrl:string,payLoad:any):any => {
+export const postData = (spHttpClient: SPHttpClient, siteUrl:string,payLoad:any,listName:string):any => {
     return dispatch => {
         const body: string = JSON.stringify(payLoad); 
-        console.log(body);
-        spHttpClient.post(`${siteUrl}/_api/web/lists/getbytitle('Trainings')/items`,  
+        spHttpClient.post(`${siteUrl}/_api/web/lists/getbytitle('${listName}')/items`,  
         SPHttpClient.configurations.v1,  
         {  
         headers: {  
