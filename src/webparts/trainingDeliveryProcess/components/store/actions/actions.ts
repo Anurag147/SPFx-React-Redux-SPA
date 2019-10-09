@@ -15,7 +15,8 @@ export enum actionTypes{
     SET_DATA,
     EVENT,
     ADD_SUCCESS,
-    CANCEL
+    CANCEL,
+    SET_ERROR
 }
 
 export interface IAction{
@@ -26,6 +27,13 @@ export interface IAction{
 export const addData = ():IAction => {
     return {
         type:actionTypes.ADD_DATA,
+        data:null
+    };
+};
+
+export const setError = ():IAction => {
+    return {
+        type:actionTypes.SET_ERROR,
         data:null
     };
 };

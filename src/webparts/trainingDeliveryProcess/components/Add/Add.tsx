@@ -7,7 +7,7 @@ import { Panel, PanelType } from 'office-ui-fabric-react/lib/Panel';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/components/Button';
 import styles from '../TrainingDeliveryProcess.module.scss';
 import { DatePicker } from 'office-ui-fabric-react/lib/DatePicker'; 
-import {changeData,IListItem,postData,cancel} from '../store/actions/actions';
+import {changeData,IListItem,postData,cancel,setError} from '../store/actions/actions';
 
 
 export interface IAddFormProps{
@@ -18,6 +18,8 @@ export interface IAddFormProps{
     item:IListItem;
     postData: (spHttpClient:SPHttpClient,siteUrl:string,data:any) => {};
     onCancel: () => {};
+    isFormvalid:boolean;
+    setError: () => {};
 }
 
 class Add extends React.Component<IAddFormProps , {}>{
@@ -37,7 +39,12 @@ class Add extends React.Component<IAddFormProps , {}>{
             TrainingStatus:this.props.item.TrainingStatus,
             Description:this.props.item.Description
         }
-        this.props.postData(this.props.spHttpClient,this.props.siteUrl,data);
+        if(data.Title!=="" && data.TrainingDate!==null && data.Description!==""){
+            this.props.postData(this.props.spHttpClient,this.props.siteUrl,data);
+        }
+        else{
+            this.props.setError();
+        }
     }
 
     private onCancel = () => {
@@ -48,7 +55,7 @@ class Add extends React.Component<IAddFormProps , {}>{
         var data={
             value: date,
             field: "DATE"
-        }
+        } 
         this.props.changeData(data);
     };
 
@@ -56,6 +63,12 @@ class Add extends React.Component<IAddFormProps , {}>{
         return date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear(); 
     }; 
         public render():React.ReactElement<IAddFormProps>{
+
+            let errorMessage = null;
+            if(!this.props.isFormvalid){
+                errorMessage="Please fill all mandatory fields."
+            }
+
         return (
             <div className={styles.Add}>
                 <div style={{backgroundColor:'#06d4d4',height:'25px'}}>
@@ -101,7 +114,10 @@ class Add extends React.Component<IAddFormProps , {}>{
                 </div>
                 <div className="col-md-8">
                 </div>
-            </div>                
+            </div>  
+            <div className="col-md-12" style={{marginTop:'10px',marginBottom:'10px'}}>
+                <div style={{color:'red'}}>{errorMessage}</div>
+            </div>              
                 </div>
             </div>
         )
@@ -110,7 +126,8 @@ class Add extends React.Component<IAddFormProps , {}>{
 
 const mapStateToProps = (state:IApplicationState) => {
     return {
-        item:state.item    
+        item:state.item,
+        isFormvalid:state.isFormvalid    
     };
 }
 
@@ -118,7 +135,8 @@ const mapDispatchToProps = (dispatch:any) => {
     return {
        changeData: (data:any) => {dispatch(changeData(data))},
        postData: (spHttpClient:SPHttpClient,siteUrl:string,data:any) => {dispatch(postData(spHttpClient,siteUrl,data))},
-       onCancel: () => {dispatch(cancel())}
+       onCancel: () => {dispatch(cancel())},
+       setError: () => {dispatch(setError())}
     };
 }
 
