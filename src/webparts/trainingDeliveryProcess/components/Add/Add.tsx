@@ -129,10 +129,10 @@ class Add extends React.Component<IAddFormProps , {}>{
             </div>
             <div className="col-md-12" style={{marginTop:'10px',marginBottom:'10px'}}>
                 <div className="col-md-2">
-                    <button type="button" className="btn btn-success" style={{marginLeft:'10%',width:'100%'}} onClick={()=>{this.onSubmit()}}>Submit</button>
+                    <button type="button" className="btn btn-success" style={{marginLeft:'10px',marginTop:'5px'}} onClick={()=>{this.onSubmit()}}>Submit</button>
                 </div>
                 <div className="col-md-2">
-                    <button type="button" className="btn btn-danger" style={{marginLeft:'10%',width:'100%'}} onClick={()=>{this.onCancel()}}>Cancel</button>
+                    <button type="button" className="btn btn-danger" style={{marginLeft:'10px',marginTop:'5px'}} onClick={()=>{this.onCancel()}}>Cancel</button>
                 </div>
                 <div className="col-md-8">
                 </div>
