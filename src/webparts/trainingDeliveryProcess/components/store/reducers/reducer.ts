@@ -7,6 +7,8 @@ export interface IApplicationState{
     item:IListItem;
     isFormvalid:boolean;
     isDateValid:boolean;
+    showSpinner:boolean;
+    showPanel:boolean;
 }
 
 const initialState: IApplicationState = {
@@ -14,18 +16,26 @@ const initialState: IApplicationState = {
     isAddFormEnabled:false,
     item:{Title:"",Description:"",TrainingStatus:"Pending ",TrainingDate:null,Author:null},
     isFormvalid:true,
-    isDateValid:true
+    isDateValid:true,
+    showSpinner:false,
+    showPanel:false
 };
 
 export const trainingReducer:Reducer<IApplicationState> = (state: IApplicationState = initialState, action:IAction) => {
     if(action.type==actionTypes.SET_DATA){
         let newState:IApplicationState = {...state};
         newState.items=action.data;
+        newState.showSpinner=false;
         return newState;
     }
     if(action.type==actionTypes.ADD_DATA){
         let newState:IApplicationState = {...state};
         newState.isAddFormEnabled=true;
+        return newState;
+    }
+    if(action.type==actionTypes.SHOW_PANEL){
+        let newState:IApplicationState = {...state};
+        newState.showPanel=action.data;
         return newState;
     }
     if(action.type==actionTypes.EVENT){
@@ -71,6 +81,11 @@ export const trainingReducer:Reducer<IApplicationState> = (state: IApplicationSt
             newState.isDateValid=false;
             newState.isFormvalid=false;
         }
+        return newState;
+    }
+    if(action.type==actionTypes.SHOW_SPINNER){
+        let newState:IApplicationState = {...state};
+        newState.showSpinner=true;
         return newState;
     }
     return state; 

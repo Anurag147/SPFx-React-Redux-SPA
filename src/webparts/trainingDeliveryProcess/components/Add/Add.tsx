@@ -7,7 +7,7 @@ import { Panel, PanelType } from 'office-ui-fabric-react/lib/Panel';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/components/Button';
 import styles from '../TrainingDeliveryProcess.module.scss';
 import { DatePicker } from 'office-ui-fabric-react/lib/DatePicker'; 
-import {changeData,IListItem,postData,cancel,setError,setDateState} from '../store/actions/actions';
+import {changeData,IListItem,postData,cancel,setError,setDateState,showPanel} from '../store/actions/actions';
 
 
 export interface IAddFormProps{
@@ -22,8 +22,10 @@ export interface IAddFormProps{
     onCancel: () => {};
     isFormvalid:boolean;
     isDateValid:boolean;
+    isShowPanel:boolean;
     setError: () => {};
     setDateState: (data:boolean) => {};
+    showPanel: (data:boolean) => {};
 }
 
 class Add extends React.Component<IAddFormProps , {}>{
@@ -37,24 +39,14 @@ class Add extends React.Component<IAddFormProps , {}>{
     };
 
     private onSubmit = () => {
+        this.props.showPanel(false);
         const data = {
             Title:this.props.item.Title,
             TrainingDate:this.props.item.TrainingDate,
             TrainingStatus:this.props.item.TrainingStatus,
             Description:this.props.item.Description
         }
-        if(data.Title!=="" && data.TrainingDate!==null && data.Description!==""){
-            if(this.checkIfDateExists(data.TrainingDate)){
-                this.props.setDateState(false);
-            }
-            else{
-                this.props.setDateState(true);
-                this.props.postData(this.props.spHttpClient,this.props.siteUrl,data,this.props.listName);
-            }
-        }
-        else{
-            this.props.setError();
-        }
+        this.props.postData(this.props.spHttpClient,this.props.siteUrl,data,this.props.listName);
     }
 
     private onCancel = () => {
@@ -82,6 +74,42 @@ class Add extends React.Component<IAddFormProps , {}>{
     private _onFormatDate = (date: Date): string => { 
         return date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear(); 
     }; 
+
+    private _onSave = () => {
+        const data = {
+            Title:this.props.item.Title,
+            TrainingDate:this.props.item.TrainingDate,
+            TrainingStatus:this.props.item.TrainingStatus,
+            Description:this.props.item.Description
+        }
+        if(data.Title!=="" && data.TrainingDate!==null && data.Description!==""){
+            if(this.checkIfDateExists(data.TrainingDate)){
+                this.props.setDateState(false);
+            }
+            else{
+                this.props.setDateState(true);
+                this.props.showPanel(true);
+            }
+        }
+        else{
+            this.props.setError();
+        }       
+    }
+    
+    private _onClosePanel = () => {
+        this.props.showPanel(false);
+    }
+    
+    private _onRenderFooterContent = (): JSX.Element => {
+        return (
+          <div style={{display:'inline'}}>
+            <PrimaryButton onClick={()=>this.onSubmit()} style={{ marginRight: '8px' }}>
+              Confirm
+          </PrimaryButton>
+            <DefaultButton onClick={()=>this._onClosePanel()}>Cancel</DefaultButton>
+          </div>
+        );
+      }
         public render():React.ReactElement<IAddFormProps>{
 
             let errorMessage:string = "";
@@ -115,6 +143,7 @@ class Add extends React.Component<IAddFormProps , {}>{
                             minDate={new Date(2000,12,30)} 
                             isMonthPickerVisible={false} 
                             onSelectDate={this.onDateFieldChange}
+                            value={this.props.item.TrainingDate}
                         /> 
                 </div>
             </div>
@@ -129,7 +158,7 @@ class Add extends React.Component<IAddFormProps , {}>{
             </div>
             <div className="col-md-12" style={{marginTop:'10px',marginBottom:'10px'}}>
                 <div className="col-md-2">
-                    <button type="button" className="btn btn-success" style={{marginLeft:'10px',marginTop:'5px'}} onClick={()=>{this.onSubmit()}}>Submit</button>
+                    <button type="button" className="btn btn-success" style={{marginLeft:'10px',marginTop:'5px'}} onClick={()=>{this._onSave()}}>Submit</button>
                 </div>
                 <div className="col-md-2">
                     <button type="button" className="btn btn-danger" style={{marginLeft:'10px',marginTop:'5px'}} onClick={()=>{this.onCancel()}}>Cancel</button>
@@ -140,7 +169,16 @@ class Add extends React.Component<IAddFormProps , {}>{
             <div className="col-md-12" style={{marginTop:'10px',marginBottom:'10px'}}>
                 <div style={{color:'red'}}>{errorMessage}</div>
             </div>              
-                </div>
+                </div>            
+                <Panel isOpen={this.props.isShowPanel}
+                type={PanelType.smallFixedFar}
+                onDismiss={this._onClosePanel}
+                isFooterAtBottom={false}
+                headerText="Are you sure you want to submit this request?"
+                closeButtonAriaLabel="Close"
+                onRenderFooterContent={this._onRenderFooterContent}>
+                <span>Please check the details filled and click on Confirm button to submit this request.</span>
+                </Panel>  
             </div>
         )
     };
@@ -151,7 +189,8 @@ const mapStateToProps = (state:IApplicationState) => {
         item:state.item,
         isFormvalid:state.isFormvalid,
         isDateValid: state.isDateValid,
-        items:state.items    
+        items:state.items,
+        isShowPanel:state.showPanel    
     };
 }
 
@@ -161,7 +200,8 @@ const mapDispatchToProps = (dispatch:any) => {
        postData: (spHttpClient:SPHttpClient,siteUrl:string,data:any,listName:string) => {dispatch(postData(spHttpClient,siteUrl,data,listName))},
        onCancel: () => {dispatch(cancel())},
        setError: () => {dispatch(setError())},
-       setDateState: (data:boolean) => {dispatch(setDateState(data))}
+       setDateState: (data:boolean) => {dispatch(setDateState(data))},
+       showPanel: (data:boolean) => {dispatch(showPanel(data))}
     };
 }
 

@@ -29,7 +29,7 @@
     ]
   },
   "include": [
-    "src/**/*.ts", "src/webparts/trainingDeliveryProcess/TrainingDeliveryProcessWebPart.tsx"
+    "src/**/*.ts", "src/webparts/trainingDeliveryProcess/TrainingDeliveryProcessWebPart.tsx", "src/webparts/trainingDeliveryProcess/components/Spinner/Spinner.tsx"
   ],
   "exclude": [
     "node_modules",

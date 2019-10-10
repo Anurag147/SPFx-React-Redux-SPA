@@ -17,7 +17,9 @@ export enum actionTypes{
     ADD_SUCCESS,
     CANCEL,
     SET_ERROR,
-    SET_DATE_STATE
+    SET_DATE_STATE,
+    SHOW_SPINNER,
+    SHOW_PANEL
 }
 
 export interface IAction{
@@ -25,17 +27,32 @@ export interface IAction{
     data: any;
 }
 
-export const addData = ():IAction => {
+export const addData = ():IAction=> {
     return {
         type:actionTypes.ADD_DATA,
-        data:null
+        data: {}
     };
 };
+
+export const showPanel = (data:boolean):IAction => {
+    return {
+        type:actionTypes.SHOW_PANEL,
+        data:data
+    };
+};
+
+export const showSpinner = ():IAction => {
+    return {
+        type:actionTypes.SHOW_SPINNER,
+        data:true
+    };
+};
+
 
 export const setError = ():IAction => {
     return {
         type:actionTypes.SET_ERROR,
-        data:null
+        data: {}
     };
 };
 
@@ -63,12 +80,13 @@ export const setData = (items: IListItem[]):IAction => {
 export const cancel = ():IAction => {
     return {
         type:actionTypes.CANCEL,
-        data: null
+        data: {}
     };
 };
 
 export const initData = (spHttpClient: SPHttpClient, siteUrl:string,listName:string):any => {
     return dispatch => {
+        dispatch(showSpinner());
         spHttpClient.get(`${siteUrl}/_api/web/lists/getbytitle('${listName}')/items?$select=Title,Description,TrainingStatus,TrainingDate,Author/Title&$expand=Author&$orderby=TrainingDate`,  
         SPHttpClient.configurations.v1,  
         {  
@@ -83,7 +101,7 @@ export const initData = (spHttpClient: SPHttpClient, siteUrl:string,listName:str
         .then((items: IListItem[]): void => {  
           dispatch(setData(items["value"]));
         }, (error: any): void => {  
-            console.log('error occurered')
+            alert(error)
         });    
     };
 };
@@ -111,11 +129,11 @@ export const postData = (spHttpClient: SPHttpClient, siteUrl:string,payLoad:any,
         return response.json();  
         })  
         .then((item: any): void => {  
-        Dialog.alert("List item created successfully");
+        Dialog.alert("Training added successfully");
         dispatch(postDataSuccess());
         }, (error: any): void => {  
         console.log(error);
-        Dialog.alert("List item creation failed");
+        Dialog.alert(error);
         });   
     };
 };
