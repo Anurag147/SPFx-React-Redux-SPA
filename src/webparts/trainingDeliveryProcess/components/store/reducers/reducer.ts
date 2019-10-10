@@ -14,7 +14,7 @@ export interface IApplicationState{
 const initialState: IApplicationState = {
     items:[],
     isAddFormEnabled:false,
-    item:{Title:"",Description:"",TrainingStatus:"Pending ",TrainingDate:null,Author:null},
+    item:{Title:"",Description:"",TrainingStatus:"Pending ",TrainingDate:new Date(),Author:null,Id:0},
     isFormvalid:true,
     isDateValid:true,
     showSpinner:false,
@@ -31,6 +31,14 @@ export const trainingReducer:Reducer<IApplicationState> = (state: IApplicationSt
     if(action.type==actionTypes.ADD_DATA){
         let newState:IApplicationState = {...state};
         newState.isAddFormEnabled=true;
+        newState.item=initialState.item;
+        return newState;
+    }
+    if(action.type==actionTypes.SET_EDIT){
+        let newState:IApplicationState = {...state};
+        newState.item=action.data;
+        newState.isAddFormEnabled=true;
+        newState.item.TrainingDate=new Date(newState.item.TrainingDate.toString());
         return newState;
     }
     if(action.type==actionTypes.SHOW_PANEL){

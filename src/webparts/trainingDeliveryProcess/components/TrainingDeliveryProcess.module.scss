@@ -4,7 +4,7 @@
   .container {
     margin: 0px auto;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 25px 50px 0 rgba(0, 0, 0, 0.1);
-    background-color: white;
+    background-color: transparent;
     padding-bottom: 1px;
   }
 
@@ -35,13 +35,13 @@ background-color: #ebfffc !important;
     cursor: pointer;
     display: inline-flexbox;
     background-color: white;
-    margin-left:15%;
-    margin-right:15%;
+    margin-left:5%;
+    margin-right:5%;
     border-radius: 10px;
     margin-bottom: 15px;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 18px;
-    width: 70%;
+    width: 90%;
   }
 
   .FeedTitle{

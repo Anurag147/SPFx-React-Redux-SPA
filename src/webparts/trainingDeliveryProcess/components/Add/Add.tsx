@@ -119,7 +119,7 @@ class Add extends React.Component<IAddFormProps , {}>{
             if(!this.props.isDateValid){
                 errorMessage=errorMessage + " A training exists on selected date, please select another date."
             }
-        return (
+        return (       
             <div className={styles.Add}>
                 <div style={{backgroundColor:'#06d4d4',height:'25px'}}>
                             <div className={styles.FeedTitle}>ADD TRAINING</div>
@@ -130,7 +130,7 @@ class Add extends React.Component<IAddFormProps , {}>{
                     <label style={{fontWeight:'bold'}}>Title <label style={{color:'red'}}>*</label></label>
                 </div>
                 <div className="col-md-10">
-                    <input style={{width:'100%'}} type="text" onChange={(event)=>this.onFormFieldChange(event,"TITLE")}></input>
+                    <input style={{width:'100%'}} type="text" onChange={(event)=>this.onFormFieldChange(event,"TITLE")} defaultValue={this.props.item.Title}></input>
                 </div>
             </div>
             <div className="col-md-12" style={{marginTop:'10px'}}>
@@ -144,6 +144,7 @@ class Add extends React.Component<IAddFormProps , {}>{
                             isMonthPickerVisible={false} 
                             onSelectDate={this.onDateFieldChange}
                             value={this.props.item.TrainingDate}
+                            defaultValue={this.props.item.TrainingDate.toString()}
                         /> 
                 </div>
             </div>
@@ -153,7 +154,7 @@ class Add extends React.Component<IAddFormProps , {}>{
                     <label style={{fontWeight:'bold'}}>Description <label style={{color:'red'}}>*</label></label>
                 </div>
                 <div className="col-md-10">
-                    <textarea style={{minHeight:'200px',width:'100%'}} onChange={(event)=>this.onFormFieldChange(event,"DESC")}></textarea>
+                    <textarea style={{minHeight:'200px',width:'100%'}} onChange={(event)=>this.onFormFieldChange(event,"DESC")} defaultValue={this.props.item.Description}></textarea>
                 </div>
             </div>
             <div className="col-md-12" style={{marginTop:'10px',marginBottom:'10px'}}>

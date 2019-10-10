@@ -3,6 +3,7 @@ import {Dialog} from '@microsoft/sp-dialog';
 
 export interface IListItem {  
     Title: string;  
+    Id: number;  
     Description: string; 
     TrainingStatus:string;
     TrainingDate:Date;
@@ -19,7 +20,8 @@ export enum actionTypes{
     SET_ERROR,
     SET_DATE_STATE,
     SHOW_SPINNER,
-    SHOW_PANEL
+    SHOW_PANEL,
+    SET_EDIT
 }
 
 export interface IAction{
@@ -31,6 +33,13 @@ export const addData = ():IAction=> {
     return {
         type:actionTypes.ADD_DATA,
         data: {}
+    };
+};
+
+export const editData = (data:IListItem):IAction=> {
+    return {
+        type:actionTypes.SET_EDIT,
+        data: data
     };
 };
 
@@ -87,7 +96,7 @@ export const cancel = ():IAction => {
 export const initData = (spHttpClient: SPHttpClient, siteUrl:string,listName:string):any => {
     return dispatch => {
         dispatch(showSpinner());
-        spHttpClient.get(`${siteUrl}/_api/web/lists/getbytitle('${listName}')/items?$select=Title,Description,TrainingStatus,TrainingDate,Author/Title&$expand=Author&$orderby=TrainingDate`,  
+        spHttpClient.get(`${siteUrl}/_api/web/lists/getbytitle('${listName}')/items?$select=Id,Title,Description,TrainingStatus,TrainingDate,Author/Title&$expand=Author&$orderby=TrainingDate`,  
         SPHttpClient.configurations.v1,  
         {  
           headers: {  
