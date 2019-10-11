@@ -22,7 +22,8 @@ export enum actionTypes{
     SHOW_SPINNER,
     SHOW_PANEL,
     SET_EDIT,
-    DELETE_DATA
+    DELETE_DATA,
+    SEARCH_DATA
 }
 
 export interface IAction{
@@ -34,6 +35,13 @@ export const addData = ():IAction=> {
     return {
         type:actionTypes.ADD_DATA,
         data: {}
+    };
+};
+
+export const searchData = (data:string):IAction=> {
+    return {
+        type:actionTypes.SEARCH_DATA,
+        data: data
     };
 };
 

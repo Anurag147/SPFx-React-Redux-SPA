@@ -99,6 +99,16 @@ TextArea:focus{
   background-color: #9dff52;
   }
 
+.SearchTab{
+  margin-right:20px;
+  width:200px;
+  border-radius:5px
+}
+.SearchTab:focus{
+  background-color: white !important;
+  border: none;
+}
+
 .Feed:hover{
 background-color: #ebfffc !important;
 }

@@ -9,7 +9,6 @@ import styles from '../TrainingDeliveryProcess.module.scss';
 import { DatePicker } from 'office-ui-fabric-react/lib/DatePicker'; 
 import {changeData,IListItem,postData,cancel,setError,setDateState,showPanel,postEditData} from '../store/actions/actions';
 
-
 export interface IAddFormProps{
     spHttpClient: SPHttpClient;  
     siteUrl: string;
@@ -79,11 +78,9 @@ class Add extends React.Component<IAddFormProps , {}>{
         if(currentItem.length>0){
             //Edit item
             if(this.props.item.TrainingDate===prvDate){
-                console.log(false);
                 return false;
             }
             else{
-                console.log('there');
                 //date is changed
                 let isExist:boolean = false;
                 let selectedDate:string= date.toISOString().split('T')[0];
@@ -92,7 +89,6 @@ class Add extends React.Component<IAddFormProps , {}>{
                         isExist=true;
                     }
                 });
-                console.log(isExist);
                 return isExist;
             }
         }
@@ -100,7 +96,7 @@ class Add extends React.Component<IAddFormProps , {}>{
             let isExist:boolean = false;
             let selectedDate:string= date.toISOString().split('T')[0];
             this.props.items.forEach(element => {
-                if(selectedDate===element.TrainingDate.toString().split('T')[0]){
+                if(selectedDate===element.TrainingDate.toString().split('T')[0] && element.TrainingStatus=="Approved"){
                     isExist=true;
                 }
             });
@@ -135,6 +131,10 @@ class Add extends React.Component<IAddFormProps , {}>{
     private _onClosePanel = () => {
         this.props.showPanel(false);
     }
+
+    private getPeoplePickerItems = (items: any[]) => {
+       
+    }
     
     private _onRenderFooterContent = (): JSX.Element => {
         return (
@@ -148,6 +148,27 @@ class Add extends React.Component<IAddFormProps , {}>{
       }
         public render():React.ReactElement<IAddFormProps>{
             let prvDate:Date=this.props.item.TrainingDate;
+            console.log(this.props.item.Id);
+            let dateTag= null;
+            if(this.props.item.Id==0){
+                dateTag= (<DatePicker placeholder="Select a date..."  
+                formatDate={this._onFormatDate} 
+                minDate={new Date(2000,12,30)} 
+                isMonthPickerVisible={false} 
+                onSelectDate={this.onDateFieldChange}
+                value={this.props.item.TrainingDate}
+                />); 
+            }
+            else{
+                dateTag=(<DatePicker placeholder="Select a date..."  
+                formatDate={this._onFormatDate} 
+                minDate={new Date(2000,12,30)} 
+                isMonthPickerVisible={false} 
+                onSelectDate={this.onDateFieldChange}
+                value={this.props.item.TrainingDate}
+                defaultValue={this.props.item.TrainingDate!==null?this.props.item.TrainingDate.toString():null}
+            /> );
+            }
             let errorMessage:string = "";
             if(!this.props.isFormvalid){
                 errorMessage="Please fill all mandatory fields."
@@ -174,14 +195,7 @@ class Add extends React.Component<IAddFormProps , {}>{
                     <label style={{fontWeight:'bold'}}>Date <label style={{color:'red'}}>*</label></label>
                 </div>
                 <div className="col-md-10">
-                <DatePicker placeholder="Select a date..."  
-                            formatDate={this._onFormatDate} 
-                            minDate={new Date(2000,12,30)} 
-                            isMonthPickerVisible={false} 
-                            onSelectDate={this.onDateFieldChange}
-                            value={this.props.item.TrainingDate}
-                            defaultValue={this.props.item.TrainingDate.toString()}
-                        /> 
+                 {dateTag}
                 </div>
             </div>
             
@@ -205,7 +219,7 @@ class Add extends React.Component<IAddFormProps , {}>{
             </div>  
             <div className="col-md-12" style={{marginTop:'10px',marginBottom:'10px'}}>
                 <div style={{color:'red'}}>{errorMessage}</div>
-            </div>              
+            </div>           
                 </div>            
                 <Panel isOpen={this.props.isShowPanel}
                 type={PanelType.smallFixedFar}

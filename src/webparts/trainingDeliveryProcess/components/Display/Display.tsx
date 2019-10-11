@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {initData,IListItem,addData,editData,postDeleteData} from '../store/actions/actions';
+import {initData,IListItem,addData,editData,postDeleteData,searchData} from '../store/actions/actions';
 import {connect} from 'react-redux';
 import {IApplicationState} from '../store/reducers/reducer';
 import { SPHttpClient } from '@microsoft/sp-http'; 
@@ -17,6 +17,7 @@ export interface IStoreProps {
     onAddData: () => {},
     onEditData: (data:IListItem) => {},
     postDeleteData: (spHttpClient: SPHttpClient, siteUrl:string,listName:string,Id:number) => {},
+    searchData: (data:string) => {},
     spinner:boolean
   }
 
@@ -25,6 +26,10 @@ class Display extends React.Component<IStoreProps,{}>{
     componentDidMount(){
         this.props.onFetchData(this.props.spHttpClient,this.props.siteUrl,this.props.listName);
     }
+
+    private onSearchFieldChange = (event) => {
+        this.props.searchData(event.target.value);
+    };
 
     public render():React.ReactElement<IStoreProps>{
         let allItems = null;
@@ -61,7 +66,8 @@ class Display extends React.Component<IStoreProps,{}>{
         return(
                     <div>
                         <div className={styles.ButtonPanel}>
-                            <button type="button" className="btn btn-danger" onClick={this.props.onAddData}>ADD TRAINING</button>
+                            <input type="text" onChange={(event)=>this.onSearchFieldChange(event)} className={styles.SearchTab} placeholder=" Search Training "></input>
+                            <button type="button" className="btn btn-danger" onClick={this.props.onAddData}>ADD</button>
                         </div>
                         <div style={{height:'10px'}}>
 
@@ -80,7 +86,7 @@ const GetFormattedDate = (createdDate:Date):string => {
 
 const mapStateToProps = (state:IApplicationState) => {
     return {
-        items:state.items,
+        items:state.searchedItems,
         spinner:state.showSpinner    
     };
 }
@@ -88,6 +94,7 @@ const mapDispatchToProps = (dispatch:any) => {
     return {
         onFetchData: (spHttpClient:SPHttpClient,siteUrl:string,listName:string) => {dispatch(initData(spHttpClient,siteUrl,listName))},
         onAddData: () => {dispatch(addData())},
+        searchData:(data:string) => {dispatch(searchData(data))},
         onEditData:(data:IListItem)=>{dispatch(editData(data))},
         postDeleteData: (spHttpClient: SPHttpClient, siteUrl:string,listName:string,Id:number) => {dispatch(postDeleteData(spHttpClient,siteUrl,listName,Id))}
     };

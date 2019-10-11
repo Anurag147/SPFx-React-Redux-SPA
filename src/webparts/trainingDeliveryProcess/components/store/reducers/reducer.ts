@@ -3,6 +3,7 @@ import {Reducer } from 'redux';
 
 export interface IApplicationState{
     items: IListItem[];
+    searchedItems:IListItem[];
     isAddFormEnabled:boolean;
     item:IListItem;
     isFormvalid:boolean;
@@ -13,8 +14,9 @@ export interface IApplicationState{
 
 const initialState: IApplicationState = {
     items:[],
+    searchedItems:[],
     isAddFormEnabled:false,
-    item:{Title:"",Description:"",TrainingStatus:"Pending ",TrainingDate:new Date(),Author:null,Id:0},
+    item:{Title:"",Description:"",TrainingStatus:"Pending ",TrainingDate:null,Author:null,Id:0},
     isFormvalid:true,
     isDateValid:true,
     showSpinner:false,
@@ -25,13 +27,18 @@ export const trainingReducer:Reducer<IApplicationState> = (state: IApplicationSt
     if(action.type==actionTypes.SET_DATA){
         let newState:IApplicationState = {...state};
         newState.items=action.data;
+        newState.searchedItems=action.data;
         newState.showSpinner=false;
+        newState.isFormvalid=true;
         return newState;
     }
     if(action.type==actionTypes.ADD_DATA){
         let newState:IApplicationState = {...state};
         newState.isAddFormEnabled=true;
-        newState.item=initialState.item;
+        newState.item.Title=initialState.item.Title;
+        newState.item.Id=initialState.item.Id;
+        newState.item.TrainingDate=initialState.item.TrainingDate;
+        newState.item.Description=initialState.item.Description;
         return newState;
     }
     if(action.type==actionTypes.SET_EDIT){
@@ -46,10 +53,22 @@ export const trainingReducer:Reducer<IApplicationState> = (state: IApplicationSt
         newState.showPanel=action.data;
         return newState;
     }
+    if(action.type==actionTypes.SEARCH_DATA){
+        let newState:IApplicationState = {...state};
+        if(action.data.trim()==""){
+            newState.searchedItems=newState.items;
+        }
+        else{
+            let filteredItems=newState.items.filter( x=> x.Title.indexOf(action.data)>=0);
+            newState.searchedItems=filteredItems;
+        }
+        return newState;
+    }
     if(action.type==actionTypes.DELETE_DATA){
         let newState:IApplicationState = {...state};
         let filteredItems=newState.items.filter( x=> x.Id !== action.data);
         newState.items=filteredItems;
+        newState.searchedItems=filteredItems;
         return newState;
     }
     if(action.type==actionTypes.EVENT){
