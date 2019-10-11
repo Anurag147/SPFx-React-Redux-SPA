@@ -7,7 +7,7 @@ import { Panel, PanelType } from 'office-ui-fabric-react/lib/Panel';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/components/Button';
 import styles from '../TrainingDeliveryProcess.module.scss';
 import { DatePicker } from 'office-ui-fabric-react/lib/DatePicker'; 
-import {changeData,IListItem,postData,cancel,setError,setDateState,showPanel} from '../store/actions/actions';
+import {changeData,IListItem,postData,cancel,setError,setDateState,showPanel,postEditData} from '../store/actions/actions';
 
 
 export interface IAddFormProps{
@@ -19,6 +19,7 @@ export interface IAddFormProps{
     items:IListItem[];
     listName:string;
     postData: (spHttpClient:SPHttpClient,siteUrl:string,data:any,listName:string) => {};
+    postEditData: (spHttpClient:SPHttpClient,siteUrl:string,data:any,listName:string,Id:number) => {};
     onCancel: () => {};
     isFormvalid:boolean;
     isDateValid:boolean;
@@ -40,13 +41,25 @@ class Add extends React.Component<IAddFormProps , {}>{
 
     private onSubmit = () => {
         this.props.showPanel(false);
-        const data = {
-            Title:this.props.item.Title,
-            TrainingDate:this.props.item.TrainingDate,
-            TrainingStatus:this.props.item.TrainingStatus,
-            Description:this.props.item.Description
+        if(this.props.item.Id>0){
+            //Edit
+            const data = {
+                Title:this.props.item.Title,
+                TrainingDate:this.props.item.TrainingDate,
+                Description:this.props.item.Description,
+            }
+            this.props.postEditData(this.props.spHttpClient,this.props.siteUrl,data,this.props.listName,this.props.item.Id);
         }
-        this.props.postData(this.props.spHttpClient,this.props.siteUrl,data,this.props.listName);
+        else{
+            //Add
+            const data = {
+                Title:this.props.item.Title,
+                TrainingDate:this.props.item.TrainingDate,
+                TrainingStatus:this.props.item.TrainingStatus,
+                Description:this.props.item.Description,
+            }
+            this.props.postData(this.props.spHttpClient,this.props.siteUrl,data,this.props.listName);
+        }
     }
 
     private onCancel = () => {
@@ -61,21 +74,44 @@ class Add extends React.Component<IAddFormProps , {}>{
         this.props.changeData(data);
     };
 
-    private checkIfDateExists = (date: Date):boolean => {
-        let isExist:boolean = false;
-        let selectedDate:string= date.toISOString().split('T')[0];
-        this.props.items.forEach(element => {
-            if(selectedDate===element.TrainingDate.toString().split('T')[0]){
-                isExist=true;
+    private checkIfDateExists = (date: Date,prvDate:Date):boolean => {
+        let currentItem:IListItem[]=this.props.items.filter(i=>i.Id==this.props.item.Id);
+        if(currentItem.length>0){
+            //Edit item
+            if(this.props.item.TrainingDate===prvDate){
+                console.log(false);
+                return false;
             }
-        });
-        return isExist;
+            else{
+                console.log('there');
+                //date is changed
+                let isExist:boolean = false;
+                let selectedDate:string= date.toISOString().split('T')[0];
+                this.props.items.forEach(element => {
+                    if(selectedDate===element.TrainingDate.toString().split('T')[0] && element.Id!==this.props.item.Id){
+                        isExist=true;
+                    }
+                });
+                console.log(isExist);
+                return isExist;
+            }
+        }
+        else{
+            let isExist:boolean = false;
+            let selectedDate:string= date.toISOString().split('T')[0];
+            this.props.items.forEach(element => {
+                if(selectedDate===element.TrainingDate.toString().split('T')[0]){
+                    isExist=true;
+                }
+            });
+            return isExist;
+        }
     };
     private _onFormatDate = (date: Date): string => { 
         return date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear(); 
     }; 
 
-    private _onSave = () => {
+    private _onSave = (prvDate:Date) => {
         const data = {
             Title:this.props.item.Title,
             TrainingDate:this.props.item.TrainingDate,
@@ -83,7 +119,7 @@ class Add extends React.Component<IAddFormProps , {}>{
             Description:this.props.item.Description
         }
         if(data.Title!=="" && data.TrainingDate!==null && data.Description!==""){
-            if(this.checkIfDateExists(data.TrainingDate)){
+            if(this.checkIfDateExists(data.TrainingDate,prvDate)){
                 this.props.setDateState(false);
             }
             else{
@@ -111,7 +147,7 @@ class Add extends React.Component<IAddFormProps , {}>{
         );
       }
         public render():React.ReactElement<IAddFormProps>{
-
+            let prvDate:Date=this.props.item.TrainingDate;
             let errorMessage:string = "";
             if(!this.props.isFormvalid){
                 errorMessage="Please fill all mandatory fields."
@@ -159,7 +195,7 @@ class Add extends React.Component<IAddFormProps , {}>{
             </div>
             <div className="col-md-12" style={{marginTop:'10px',marginBottom:'10px'}}>
                 <div className="col-md-2">
-                    <button type="button" className="btn btn-success" style={{marginLeft:'10px',marginTop:'5px'}} onClick={()=>{this._onSave()}}>Submit</button>
+                    <button type="button" className="btn btn-success" style={{marginLeft:'10px',marginTop:'5px'}} onClick={()=>{this._onSave(prvDate)}}>Submit</button>
                 </div>
                 <div className="col-md-2">
                     <button type="button" className="btn btn-danger" style={{marginLeft:'10px',marginTop:'5px'}} onClick={()=>{this.onCancel()}}>Cancel</button>
@@ -202,7 +238,8 @@ const mapDispatchToProps = (dispatch:any) => {
        onCancel: () => {dispatch(cancel())},
        setError: () => {dispatch(setError())},
        setDateState: (data:boolean) => {dispatch(setDateState(data))},
-       showPanel: (data:boolean) => {dispatch(showPanel(data))}
+       showPanel: (data:boolean) => {dispatch(showPanel(data))},
+       postEditData:(spHttpClient:SPHttpClient,siteUrl:string,data:any,listName:string,Id:number) => {dispatch(postEditData(spHttpClient,siteUrl,data,listName,Id))},
     };
 }
 

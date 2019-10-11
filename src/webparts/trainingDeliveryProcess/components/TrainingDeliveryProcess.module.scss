@@ -20,6 +20,77 @@
     margin-Top:20px;
  }
 
+ .ButtonPanel{
+  margin-left:5%;
+  margin-right:5%;
+  width:90%;
+  height:40px;
+  text-align:right;
+  padding-top:10px
+ }
+
+ .DatePanel{
+  display:inline;
+  text-align:left;
+  padding-left:10px;
+  color:#2ea808
+ }
+
+ .PersonPanel{
+  display:inline;
+  text-align:right;
+  padding-left:20px;
+  color:#2ea808
+ }
+
+ .EditPanel{
+  display:inline;
+  text-align:'left';
+  padding-left:10px
+ }
+
+ .DisplayLabel{
+  background-color:#06d4d4;
+  height:25px
+ }
+
+ .DisplayInfo{
+   padding-bottom:10px;
+   font-size:small
+ }
+
+ .DisplayPanel{
+  border: 1px solid #e3e8e8;
+ }
+
+ .DescriptionPanel{
+  padding-top:10px;
+  padding-bottom:10px
+ }
+
+ .EditButton{
+  background-color:white;
+  width:70px;
+  color:grey;
+  border:1px solid #e3e6e6;
+ }
+
+ .FontIcon{
+  font-size:18px;
+  padding-right:5px;
+  color:#2ea808;
+ }
+
+ .AddLabel{
+  background-color:#06d4d4;
+  height:25px;
+ }
+
+ .AddPanel{
+  background-color:white;
+  border:1px solid #e3e8e8;
+ }
+
 Input:focus{
 background-color: #9dff52; 
 }

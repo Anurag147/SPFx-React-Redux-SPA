@@ -67,7 +67,8 @@ export const trainingReducer:Reducer<IApplicationState> = (state: IApplicationSt
         //newState.items.push(newState.item);
         newState.item.Title="";
         newState.item.Description="";
-        newState.item.TrainingDate=null;
+        newState.item.TrainingDate=new Date();
+        newState.item.Id=0;
         return newState;
     }
     if(action.type==actionTypes.CANCEL){

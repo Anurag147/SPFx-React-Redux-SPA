@@ -1,5 +1,4 @@
 import * as React from 'react';
-import {ITrainingDeliveryProcessProps} from '../ITrainingDeliveryProcessProps';
 import {initData,IListItem,addData,editData} from '../store/actions/actions';
 import {connect} from 'react-redux';
 import {IApplicationState} from '../store/reducers/reducer';
@@ -28,21 +27,25 @@ class Display extends React.Component<IStoreProps,{}>{
 
     public render():React.ReactElement<IStoreProps>{
         let allItems = null;
+        let displayButtonClass="btn btn-primary "+ styles.EditButton;
+        let dateIconClass="fa fa-clock-o "+ styles.FontIcon;
+        let personIconClass="fa fa-user "+ styles.FontIcon;
+
         if(this.props.items.length>0){
             let userName=this.props.context.pageContext.user.displayName;
             allItems = this.props.items.map(item=>(
                 <div className={styles.Feed}>
-                    <div style={{backgroundColor:'#06d4d4',height:'25px'}}>
+                    <div className={styles.DisplayLabel}>
                         <div className={styles.FeedTitle}>{item.Title}</div>
                     </div>
-                    <div style={{border: '1px solid #e3e8e8'}}>
-                        <div style={{paddingTop:'10px',paddingBottom:'10px'}}>
+                    <div className={styles.DisplayPanel}>
+                        <div className={styles.DescriptionPanel}>
                             <div className={styles.FeedDescription}>{item.Description}</div>
                         </div>
-                        <div style={{paddingBottom:'10px',fontSize:'small'}}>
-                            <div style={{display:'inline',textAlign:'left',paddingLeft:'10px',color:'#2ea808'}}><i className="fa fa-clock-o" style={{fontSize:'18px',paddingRight:'5px',color:'#2ea808'}}>{GetFormattedDate(item.TrainingDate)}</i></div>
-                            <div style={{display:'inline',textAlign:'right',paddingLeft:'20px',color:'#2ea808'}}><i className="fa fa-user" style={{fontSize:'18px',color:'#2ea808',paddingRight:'5px'}}>{item.Author.Title}</i></div>
-                            <div style={{display:'inline',textAlign:'left',paddingLeft:'10px'}}>{item.Author.Title==userName?(<button type="button" className="btn btn-primary" style={{backgroundColor:'white',width:'70px',color:'grey',border:'1px solid #e3e6e6'}} onClick={()=>this.props.onEditData(item)}>Edit</button>):null}</div>
+                        <div className={styles.DisplayInfo}>
+                            <div className={styles.DatePanel}><i className={dateIconClass}>{GetFormattedDate(item.TrainingDate)}</i></div>
+                            <div className={styles.PersonPanel}><i className={personIconClass}>{item.Author.Title}</i></div>
+                            <div className={styles.EditPanel}>{item.Author.Title==userName?(<button type="button" className={displayButtonClass} onClick={()=>this.props.onEditData(item)}>Edit</button>):null}</div>
                         </div>
                     </div>
                 </div>
@@ -54,7 +57,7 @@ class Display extends React.Component<IStoreProps,{}>{
         
         return(
                     <div>
-                        <div style={{marginLeft:'5%',marginRight:'5%',width:'90%',height:'40px',textAlign:'right',paddingTop:'10px'}}>
+                        <div className={styles.ButtonPanel}>
                             <button type="button" className="btn btn-danger" onClick={this.props.onAddData}>ADD TRAINING</button>
                         </div>
                         <div style={{height:'10px'}}>
