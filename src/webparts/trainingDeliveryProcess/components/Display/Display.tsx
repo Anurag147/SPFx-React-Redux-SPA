@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {initData,IListItem,addData,editData} from '../store/actions/actions';
+import {initData,IListItem,addData,editData,postDeleteData} from '../store/actions/actions';
 import {connect} from 'react-redux';
 import {IApplicationState} from '../store/reducers/reducer';
 import { SPHttpClient } from '@microsoft/sp-http'; 
@@ -16,6 +16,7 @@ export interface IStoreProps {
     listName:string;
     onAddData: () => {},
     onEditData: (data:IListItem) => {},
+    postDeleteData: (spHttpClient: SPHttpClient, siteUrl:string,listName:string,Id:number) => {},
     spinner:boolean
   }
 
@@ -28,6 +29,7 @@ class Display extends React.Component<IStoreProps,{}>{
     public render():React.ReactElement<IStoreProps>{
         let allItems = null;
         let displayButtonClass="btn btn-primary "+ styles.EditButton;
+        let deleteButtonClass="btn btn-danger "+ styles.EditButton;
         let dateIconClass="fa fa-clock-o "+ styles.FontIcon;
         let personIconClass="fa fa-user "+ styles.FontIcon;
 
@@ -46,6 +48,7 @@ class Display extends React.Component<IStoreProps,{}>{
                             <div className={styles.DatePanel}><i className={dateIconClass}>{GetFormattedDate(item.TrainingDate)}</i></div>
                             <div className={styles.PersonPanel}><i className={personIconClass}>{item.Author.Title}</i></div>
                             <div className={styles.EditPanel}>{item.Author.Title==userName?(<button type="button" className={displayButtonClass} onClick={()=>this.props.onEditData(item)}>Edit</button>):null}</div>
+                            <div className={styles.EditPanel}>{item.Author.Title==userName?(<button type="button" className={deleteButtonClass} onClick={()=>this.props.postDeleteData(this.props.spHttpClient,this.props.siteUrl,this.props.listName,item.Id)}>Delete</button>):null}</div>
                         </div>
                     </div>
                 </div>
@@ -85,7 +88,8 @@ const mapDispatchToProps = (dispatch:any) => {
     return {
         onFetchData: (spHttpClient:SPHttpClient,siteUrl:string,listName:string) => {dispatch(initData(spHttpClient,siteUrl,listName))},
         onAddData: () => {dispatch(addData())},
-        onEditData:(data:IListItem)=>{dispatch(editData(data))}
+        onEditData:(data:IListItem)=>{dispatch(editData(data))},
+        postDeleteData: (spHttpClient: SPHttpClient, siteUrl:string,listName:string,Id:number) => {dispatch(postDeleteData(spHttpClient,siteUrl,listName,Id))}
     };
 }
 

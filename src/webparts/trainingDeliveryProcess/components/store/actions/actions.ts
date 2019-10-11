@@ -21,7 +21,8 @@ export enum actionTypes{
     SET_DATE_STATE,
     SHOW_SPINNER,
     SHOW_PANEL,
-    SET_EDIT
+    SET_EDIT,
+    DELETE_DATA
 }
 
 export interface IAction{
@@ -146,7 +147,6 @@ export const postData = (spHttpClient: SPHttpClient, siteUrl:string,payLoad:any,
         });   
     };
 };
-
 export const postEditDataSuccess = ():IAction => {
     return {
             type:actionTypes.ADD_SUCCESS,
@@ -171,6 +171,36 @@ export const postEditData = (spHttpClient: SPHttpClient, siteUrl:string,payLoad:
         .then((response: SPHttpClientResponse): any => {  
             Dialog.alert("Training edited successfully");
             dispatch(postEditDataSuccess()); 
+        },
+        (error: any): void => {  
+            console.log(error);
+            Dialog.alert(error);
+        });   
+    };
+};
+
+export const postDeleteDataSuccess = (data:number):IAction => {
+    return {
+            type:actionTypes.DELETE_DATA,
+            data:data
+        };
+}
+export const postDeleteData = (spHttpClient: SPHttpClient, siteUrl:string,listName:string,Id:number):any => {
+    return dispatch => {
+        spHttpClient.post(`${siteUrl}/_api/web/lists/getbytitle('${listName}')/items(${Id})`,  
+        SPHttpClient.configurations.v1,  
+        {  
+        headers: {  
+            'Accept': 'application/json;odata=nometadata',  
+            'Content-type': 'application/json;odata=nometadata',  
+            'odata-version': '' ,
+            "IF-MATCH": "*",  
+            "X-HTTP-Method": "DELETE",  
+        } 
+        })  
+        .then((response: SPHttpClientResponse): any => {  
+            Dialog.alert("Training deleted successfully");
+            dispatch(postDeleteDataSuccess(Id)); 
         },
         (error: any): void => {  
             console.log(error);

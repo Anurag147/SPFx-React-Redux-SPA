@@ -46,6 +46,12 @@ export const trainingReducer:Reducer<IApplicationState> = (state: IApplicationSt
         newState.showPanel=action.data;
         return newState;
     }
+    if(action.type==actionTypes.DELETE_DATA){
+        let newState:IApplicationState = {...state};
+        let filteredItems=newState.items.filter( x=> x.Id !== action.data);
+        newState.items=filteredItems;
+        return newState;
+    }
     if(action.type==actionTypes.EVENT){
         let newState:IApplicationState = {...state};
         var data=action.data;
