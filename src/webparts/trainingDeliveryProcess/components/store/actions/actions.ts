@@ -222,7 +222,7 @@ export const postDeleteData = (spHttpClient: SPHttpClient, siteUrl:string,listNa
         } 
         })  
         .then((response: SPHttpClientResponse): any => {  
-            Dialog.alert("Training deleted successfully");
+            Dialog.alert("Event deleted successfully");
             dispatch(postDeleteDataSuccess(Id)); 
         },
         (error: any): void => {  
