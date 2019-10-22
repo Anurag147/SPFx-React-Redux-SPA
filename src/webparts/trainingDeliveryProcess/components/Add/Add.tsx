@@ -124,7 +124,7 @@ class Add extends React.Component<IAddFormProps , {}>{
             let isExist:boolean = false;
             let selectedDate:string= date.toISOString().split('T')[0];
             this.props.items.forEach(element => {
-                if(selectedDate===element.TrainingDate.toString().split('T')[0] && element.TrainingStatus=="Approved"){
+                if(selectedDate===element.TrainingDate.toString().split('T')[0]){
                     isExist=true;
                 }
             });
