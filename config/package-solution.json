@@ -3,7 +3,7 @@
   "solution": {
     "name": "training-webpart-react-client-side-solution",
     "id": "be7436c2-a4f5-4fcf-b468-f27ea23bde6a",
-    "version": "2.0.0.9",
+    "version": "2.1.0.0",
     "includeClientSideAssets": true,
     "isDomainIsolated": false
   },

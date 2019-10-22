@@ -30,6 +30,7 @@ export const trainingReducer:Reducer<IApplicationState> = (state: IApplicationSt
         newState.searchedItems=action.data;
         newState.showSpinner=false;
         newState.isFormvalid=true;
+        newState.isDateValid=true;
         return newState;
     }
     if(action.type==actionTypes.SET_LOC){

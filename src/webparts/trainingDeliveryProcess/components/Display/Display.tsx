@@ -45,7 +45,7 @@ class Display extends React.Component<IStoreProps,{}>{
                         <div className={styles.FeedTitle}>{item.Title}</div>
                     </div>
                     <div className={styles.DisplayPanel}>
-                        <div style={{textAlign:'right',marginRight:'5px',marginTop:'5px'}}>
+                        <div style={{textAlign:'right',marginRight:'5px',marginTop:'5px',cursor:'pointer'}}>
                             <div className={styles.EditPanel}>{item.Author.Title==userName?(<i style={{color:'black',fontSize:'20px'}} className="fa fa-edit" onClick={()=>this.props.onEditData(item)}></i>):null}</div>
                             <div className={styles.EditPanel}>{item.Author.Title==userName?(<i style={{color:'#ff4d4d',fontSize:'20px'}} className="fa fa-trash" onClick={()=>this.props.postDeleteData(this.props.spHttpClient,this.props.siteUrl,this.props.listName,item.Id)}></i>):null}</div>
                         </div>
