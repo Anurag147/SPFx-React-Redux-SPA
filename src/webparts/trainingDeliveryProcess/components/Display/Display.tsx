@@ -68,7 +68,7 @@ class Display extends React.Component<IStoreProps,{}>{
         return(
                     <div>
                         <div className={styles.ButtonPanel}>
-                            <input style={{width:'60%',height:'30px'}} type="text" onChange={(event)=>this.onSearchFieldChange(event)} className={styles.SearchTab} placeholder=" Search Event "></input>
+                            <input style={{height:'30px'}} type="text" onChange={(event)=>this.onSearchFieldChange(event)} className={styles.SearchTab} placeholder=" Search Event "></input>
                             <button style={{marginLeft:'20px'}}  type="button" className="btn btn-danger" onClick={this.props.onAddData}>New Event</button>
                         </div>
                         <div style={{height:'10px'}}>
