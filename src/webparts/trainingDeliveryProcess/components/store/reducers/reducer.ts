@@ -70,7 +70,9 @@ export const trainingReducer:Reducer<IApplicationState> = (state: IApplicationSt
             newState.searchedItems=newState.items;
         }
         else{
-            let filteredItems=newState.items.filter( x=> x.Title.indexOf(action.data)>=0);
+            let filteredItems=newState.items.filter( x=> x.Title.toLowerCase().indexOf(action.data.toLowerCase())>=0 
+            || x.Description.toLowerCase().indexOf(action.data.toLowerCase())>=0
+            || x.Author.Title.toLowerCase().indexOf(action.data.toLowerCase())>=0);
             newState.searchedItems=filteredItems;
         }
         return newState;

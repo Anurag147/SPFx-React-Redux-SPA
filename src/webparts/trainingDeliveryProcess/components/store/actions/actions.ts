@@ -1,6 +1,5 @@
 import { SPHttpClient, SPHttpClientResponse } from '@microsoft/sp-http';
 import {Dialog} from '@microsoft/sp-dialog';
-import {IPickerTerms} from "@pnp/spfx-controls-react/lib/TaxonomyPicker";
 export interface IListItem {  
     Title: string;  
     Id: number;  
@@ -163,8 +162,7 @@ export const postData = (spHttpClient: SPHttpClient, siteUrl:string,payLoad:any,
         return response.json();  
         })  
         .then((item: any): void => {  
-        console.log(item);
-        Dialog.alert("Training added successfully");
+        Dialog.alert("New event created successfully");
         dispatch(postDataSuccess());
         }, (error: any): void => {  
         console.log(error);
@@ -194,7 +192,7 @@ export const postEditData = (spHttpClient: SPHttpClient, siteUrl:string,payLoad:
         body: body  
         })  
         .then((response: SPHttpClientResponse): any => {  
-            Dialog.alert("Training edited successfully");
+            Dialog.alert("Event edited successfully");
             dispatch(postEditDataSuccess()); 
         },
         (error: any): void => {  

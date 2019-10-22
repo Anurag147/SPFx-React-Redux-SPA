@@ -214,7 +214,7 @@ class Add extends React.Component<IAddFormProps , {}>{
         return (       
             <div className={styles.Add}>
                 <div style={{backgroundColor:'#66cc99',height:'25px'}}>
-                            <div className={styles.FeedTitle}>ADD TRAINING</div>
+                            <div className={styles.FeedTitle}>ADD EVENT</div>
                 </div>
                 <div className= "col-md-12" style={{backgroundColor:'white',border:'1px solid #e3e8e8'}}>
                 <div className="col-md-12" style={{marginTop:'10px'}}>
