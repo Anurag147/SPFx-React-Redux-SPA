@@ -7,7 +7,9 @@ import { Panel, PanelType } from 'office-ui-fabric-react/lib/Panel';
 import { PrimaryButton, DefaultButton } from 'office-ui-fabric-react/lib/components/Button';
 import styles from '../TrainingDeliveryProcess.module.scss';
 import { DatePicker } from 'office-ui-fabric-react/lib/DatePicker'; 
-import {changeData,IListItem,postData,cancel,setError,setDateState,showPanel,postEditData} from '../store/actions/actions';
+import {changeData,IListItem,postData,cancel,setError,setDateState,showPanel,postEditData,setLocation,ILocation} from '../store/actions/actions';
+import { TaxonomyPicker, IPickerTerms, IPickerTerm } from "@pnp/spfx-controls-react/lib/TaxonomyPicker";
+import { PeoplePicker,PrincipalType } from "@pnp/spfx-controls-react/lib/PeoplePicker";  
 
 export interface IAddFormProps{
     spHttpClient: SPHttpClient;  
@@ -26,10 +28,10 @@ export interface IAddFormProps{
     setError: () => {};
     setDateState: (data:boolean) => {};
     showPanel: (data:boolean) => {};
+    setLocation: (data:ILocation[]) => {};
 }
 
 class Add extends React.Component<IAddFormProps , {}>{
- 
     private onFormFieldChange = (event,inputIdentifier:string) => {
         var data={
             value: event.target.value,
@@ -40,27 +42,41 @@ class Add extends React.Component<IAddFormProps , {}>{
 
     private onSubmit = () => {
         this.props.showPanel(false);
+        let termsString: string = '';
+        this.props.item.Location.forEach(term => {
+        termsString += `-1;#${term.Label}|${this.cleanGuid(term.TermGuid)};#`;
+        });
         if(this.props.item.Id>0){
-            //Edit
+            //Edit d97505acfe8d4af08f7b24ccf38b657f is internal name for Location taxonomy hidden field
             const data = {
                 Title:this.props.item.Title,
                 TrainingDate:this.props.item.TrainingDate,
                 Description:this.props.item.Description,
+                d97505acfe8d4af08f7b24ccf38b657f: termsString
             }
             this.props.postEditData(this.props.spHttpClient,this.props.siteUrl,data,this.props.listName,this.props.item.Id);
         }
         else{
-            //Add
+            //Add d97505acfe8d4af08f7b24ccf38b657f is internal name for Location taxonomy hidden field
             const data = {
                 Title:this.props.item.Title,
                 TrainingDate:this.props.item.TrainingDate,
                 TrainingStatus:this.props.item.TrainingStatus,
                 Description:this.props.item.Description,
+                d97505acfe8d4af08f7b24ccf38b657f: termsString
             }
             this.props.postData(this.props.spHttpClient,this.props.siteUrl,data,this.props.listName);
         }
     }
 
+    private cleanGuid(guid: string): string {
+        if (guid !== undefined) {
+            return guid.replace('/Guid(', '').replace('/', '').replace(')', '');
+        } else {
+            return '';
+        }
+    }
+    
     private onCancel = () => {
         this.props.onCancel();
     }
@@ -72,6 +88,18 @@ class Add extends React.Component<IAddFormProps , {}>{
         } 
         this.props.changeData(data);
     };
+
+    private onTaxPickerChange = (terms: IPickerTerms) => {
+        var data:ILocation[] = [];
+        terms.map(t=>(
+            data.push({
+                Label:t.name,
+                TermGuid:t.key,
+                WssId:'-1'
+            })
+        ));
+        this.props.setLocation(data);
+    }
 
     private checkIfDateExists = (date: Date,prvDate:Date):boolean => {
         let currentItem:IListItem[]=this.props.items.filter(i=>i.Id==this.props.item.Id);
@@ -112,9 +140,10 @@ class Add extends React.Component<IAddFormProps , {}>{
             Title:this.props.item.Title,
             TrainingDate:this.props.item.TrainingDate,
             TrainingStatus:this.props.item.TrainingStatus,
-            Description:this.props.item.Description
+            Description:this.props.item.Description,
+            Location:this.props.item.Location
         }
-        if(data.Title!=="" && data.TrainingDate!==null && data.Description!==""){
+        if(data.Title!=="" && data.TrainingDate!==null && data.Description!=="" && data.Location!==null){
             if(this.checkIfDateExists(data.TrainingDate,prvDate)){
                 this.props.setDateState(false);
             }
@@ -131,10 +160,6 @@ class Add extends React.Component<IAddFormProps , {}>{
     private _onClosePanel = () => {
         this.props.showPanel(false);
     }
-
-    private getPeoplePickerItems = (items: any[]) => {
-       
-    }
     
     private _onRenderFooterContent = (): JSX.Element => {
         return (
@@ -147,8 +172,18 @@ class Add extends React.Component<IAddFormProps , {}>{
         );
       }
         public render():React.ReactElement<IAddFormProps>{
+            const iPickerTerm :IPickerTerms=[];
+            if(this.props.item.Location!==null){
+            this.props.item.Location.map(it=>(
+                iPickerTerm.push({
+                    name:it.Label,
+                    key:it.TermGuid,
+                    path:'',
+                    termSet:'FeedLocation'
+                })
+            ));       
+        } 
             let prvDate:Date=this.props.item.TrainingDate;
-            console.log(this.props.item.Id);
             let dateTag= null;
             if(this.props.item.Id==0){
                 dateTag= (<DatePicker placeholder="Select a date..."  
@@ -178,7 +213,7 @@ class Add extends React.Component<IAddFormProps , {}>{
             }
         return (       
             <div className={styles.Add}>
-                <div style={{backgroundColor:'#06d4d4',height:'25px'}}>
+                <div style={{backgroundColor:'#66cc99',height:'25px'}}>
                             <div className={styles.FeedTitle}>ADD TRAINING</div>
                 </div>
                 <div className= "col-md-12" style={{backgroundColor:'white',border:'1px solid #e3e8e8'}}>
@@ -198,7 +233,25 @@ class Add extends React.Component<IAddFormProps , {}>{
                  {dateTag}
                 </div>
             </div>
-            
+
+            <div className="col-md-12" style={{marginTop:'10px'}}>
+                <div className="col-md-2">
+                    <label style={{fontWeight:'bold'}}>Location <label style={{color:'red'}}>*</label></label>
+                </div>
+                <div className="col-md-10">
+                <TaxonomyPicker
+                  allowMultipleSelections={true}
+                  termsetNameOrID="FeedLocation"
+                  panelTitle="Select Location"
+                  label=""
+                  context={this.props.context}
+                  onChange={this.onTaxPickerChange}
+                  isTermSetSelectable={false}
+                  initialValues={iPickerTerm}
+                />
+                </div>
+            </div>
+
             <div className="col-md-12" style={{marginTop:'10px'}}>
                 <div className="col-md-2">
                     <label style={{fontWeight:'bold'}}>Description <label style={{color:'red'}}>*</label></label>
@@ -253,6 +306,7 @@ const mapDispatchToProps = (dispatch:any) => {
        setError: () => {dispatch(setError())},
        setDateState: (data:boolean) => {dispatch(setDateState(data))},
        showPanel: (data:boolean) => {dispatch(showPanel(data))},
+       setLocation: (data:ILocation[]) => {dispatch(setLocation(data))},
        postEditData:(spHttpClient:SPHttpClient,siteUrl:string,data:any,listName:string,Id:number) => {dispatch(postEditData(spHttpClient,siteUrl,data,listName,Id))},
     };
 }

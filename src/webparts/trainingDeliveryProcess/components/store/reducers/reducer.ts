@@ -16,7 +16,7 @@ const initialState: IApplicationState = {
     items:[],
     searchedItems:[],
     isAddFormEnabled:false,
-    item:{Title:"",Description:"",TrainingStatus:"Pending ",TrainingDate:null,Author:null,Id:0},
+    item:{Title:"",Description:"",TrainingStatus:"Pending ",TrainingDate:null,Author:null,Id:0,Location:null},
     isFormvalid:true,
     isDateValid:true,
     showSpinner:false,
@@ -32,6 +32,16 @@ export const trainingReducer:Reducer<IApplicationState> = (state: IApplicationSt
         newState.isFormvalid=true;
         return newState;
     }
+    if(action.type==actionTypes.SET_LOC){
+        let newState:IApplicationState = {...state};
+        if(action.data.length==0){
+            newState.item.Location=null; 
+        }
+        else{
+            newState.item.Location=action.data;
+        }
+        return newState;
+    }
     if(action.type==actionTypes.ADD_DATA){
         let newState:IApplicationState = {...state};
         newState.isAddFormEnabled=true;
@@ -39,6 +49,7 @@ export const trainingReducer:Reducer<IApplicationState> = (state: IApplicationSt
         newState.item.Id=initialState.item.Id;
         newState.item.TrainingDate=initialState.item.TrainingDate;
         newState.item.Description=initialState.item.Description;
+        newState.item.Location=initialState.item.Location;
         return newState;
     }
     if(action.type==actionTypes.SET_EDIT){

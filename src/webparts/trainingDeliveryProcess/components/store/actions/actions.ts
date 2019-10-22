@@ -1,13 +1,20 @@
 import { SPHttpClient, SPHttpClientResponse } from '@microsoft/sp-http';
 import {Dialog} from '@microsoft/sp-dialog';
-
+import {IPickerTerms} from "@pnp/spfx-controls-react/lib/TaxonomyPicker";
 export interface IListItem {  
     Title: string;  
     Id: number;  
     Description: string; 
     TrainingStatus:string;
     TrainingDate:Date;
-    Author: {Title:string}
+    Author: {Title:string},
+    Location:ILocation[]
+}
+
+export interface ILocation {  
+    Label: string;  
+    TermGuid: string;  
+    WssId: string; 
 }
 
 export enum actionTypes{
@@ -23,7 +30,8 @@ export enum actionTypes{
     SHOW_PANEL,
     SET_EDIT,
     DELETE_DATA,
-    SEARCH_DATA
+    SEARCH_DATA,
+    SET_LOC
 }
 
 export interface IAction{
@@ -81,6 +89,13 @@ export const setDateState = (data:boolean):IAction => {
     };
 };
 
+export const setLocation = (terms: ILocation[]):IAction => {
+    return {
+        type:actionTypes.SET_LOC,
+        data:terms
+    };
+};
+
 export const changeData = (data):IAction => {
     return {
         type:actionTypes.EVENT,
@@ -105,7 +120,7 @@ export const cancel = ():IAction => {
 export const initData = (spHttpClient: SPHttpClient, siteUrl:string,listName:string):any => {
     return dispatch => {
         dispatch(showSpinner());
-        spHttpClient.get(`${siteUrl}/_api/web/lists/getbytitle('${listName}')/items?$select=Id,Title,Description,TrainingStatus,TrainingDate,Author/Title&$expand=Author&$orderby=TrainingDate`,  
+        spHttpClient.get(`${siteUrl}/_api/web/lists/getbytitle('${listName}')/items?$select=Id,Title,Description,Location,TrainingStatus,TrainingDate,Author/Title&$expand=Author&$orderby=TrainingDate`,  
         SPHttpClient.configurations.v1,  
         {  
           headers: {  
@@ -116,7 +131,7 @@ export const initData = (spHttpClient: SPHttpClient, siteUrl:string,listName:str
         .then((response: SPHttpClientResponse): Promise<IListItem[]> => {  
           return response.json();   
         })
-        .then((items: IListItem[]): void => {  
+        .then((items: IListItem[]): void => {
           dispatch(setData(items["value"]));
         }, (error: any): void => {  
             alert(error)
@@ -133,6 +148,7 @@ export const postDataSuccess = ():IAction => {
 export const postData = (spHttpClient: SPHttpClient, siteUrl:string,payLoad:any,listName:string):any => {
     return dispatch => {
         const body: string = JSON.stringify(payLoad); 
+        console.log(body);
         spHttpClient.post(`${siteUrl}/_api/web/lists/getbytitle('${listName}')/items`,  
         SPHttpClient.configurations.v1,  
         {  
@@ -147,6 +163,7 @@ export const postData = (spHttpClient: SPHttpClient, siteUrl:string,payLoad:any,
         return response.json();  
         })  
         .then((item: any): void => {  
+        console.log(item);
         Dialog.alert("Training added successfully");
         dispatch(postDataSuccess());
         }, (error: any): void => {  

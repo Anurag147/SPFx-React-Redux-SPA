@@ -50,7 +50,7 @@
  }
 
  .DisplayLabel{
-  background-color:#06d4d4;
+  background-color:#66cc99;
   height:25px
  }
 
@@ -60,7 +60,7 @@
  }
 
  .DisplayPanel{
-  border: 1px solid #e3e8e8;
+  border: 1px solid #adebad;
  }
 
  .DescriptionPanel{
@@ -82,7 +82,7 @@
  }
 
  .AddLabel{
-  background-color:#06d4d4;
+  background-color:#70db70;
   height:25px;
  }
 
@@ -108,11 +108,7 @@ TextArea:focus{
   background-color: white !important;
   border: none;
 }
-
-.Feed:hover{
-background-color: #ebfffc !important;
-}
-  .Feed{
+.Feed{
     cursor: pointer;
     display: inline-flexbox;
     background-color: white;

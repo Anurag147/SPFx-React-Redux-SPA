@@ -40,20 +40,24 @@ class Display extends React.Component<IStoreProps,{}>{
 
         if(this.props.items.length>0){
             let userName=this.props.context.pageContext.user.displayName;
+            let locations:string = "";
             allItems = this.props.items.map(item=>(
                 <div className={styles.Feed}>
                     <div className={styles.DisplayLabel}>
                         <div className={styles.FeedTitle}>{item.Title}</div>
                     </div>
                     <div className={styles.DisplayPanel}>
+                        <div style={{textAlign:'right',marginRight:'5px',marginTop:'5px'}}>
+                            <div className={styles.EditPanel}>{item.Author.Title==userName?(<i style={{color:'black',fontSize:'20px'}} className="fa fa-edit" onClick={()=>this.props.onEditData(item)}></i>):null}</div>
+                            <div className={styles.EditPanel}>{item.Author.Title==userName?(<i style={{color:'#ff4d4d',fontSize:'20px'}} className="fa fa-trash" onClick={()=>this.props.postDeleteData(this.props.spHttpClient,this.props.siteUrl,this.props.listName,item.Id)}></i>):null}</div>
+                        </div>
                         <div className={styles.DescriptionPanel}>
                             <div className={styles.FeedDescription}>{item.Description}</div>
                         </div>
                         <div className={styles.DisplayInfo}>
-                            <div className={styles.DatePanel}><i className={dateIconClass}>{GetFormattedDate(item.TrainingDate)}</i></div>
-                            <div className={styles.PersonPanel}><i className={personIconClass}>{item.Author.Title}</i></div>
-                            <div className={styles.EditPanel}>{item.Author.Title==userName?(<button type="button" className={displayButtonClass} onClick={()=>this.props.onEditData(item)}>Edit</button>):null}</div>
-                            <div className={styles.EditPanel}>{item.Author.Title==userName?(<button type="button" className={deleteButtonClass} onClick={()=>this.props.postDeleteData(this.props.spHttpClient,this.props.siteUrl,this.props.listName,item.Id)}>Delete</button>):null}</div>
+                            <div className={styles.DatePanel}><i className={dateIconClass}>{" "+GetFormattedDate(item.TrainingDate)}</i></div>
+                            <div className={styles.PersonPanel}><i className={personIconClass}>{" "+item.Author.Title}</i></div>
+                            <div className={styles.PersonPanel}>{item.Location!=null && item.Location.length>0 ?(<i className={personIconClass}>{item.Location.length==1?item.Location.map(i=>(" "+i.Label)):item.Location.map(i=>(i.Label+","))}</i>):""}</div>
                         </div>
                     </div>
                 </div>
@@ -81,7 +85,8 @@ class Display extends React.Component<IStoreProps,{}>{
 const GetFormattedDate = (createdDate:Date):string => {
     var date:Date = new Date(createdDate.toString());
     var month:number=date.getMonth()+1;
-    return date.getDate() + "/" + month + "/" + date.getFullYear();
+    var allMonths:string[] = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
+    return date.getDate() + "-" + allMonths[month+1] + "-" + date.getFullYear();
 }
 
 const mapStateToProps = (state:IApplicationState) => {
