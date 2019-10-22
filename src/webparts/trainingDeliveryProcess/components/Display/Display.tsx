@@ -33,14 +33,12 @@ class Display extends React.Component<IStoreProps,{}>{
 
     public render():React.ReactElement<IStoreProps>{
         let allItems = null;
-        let displayButtonClass="btn btn-primary "+ styles.EditButton;
-        let deleteButtonClass="btn btn-danger "+ styles.EditButton;
         let dateIconClass="fa fa-clock-o "+ styles.FontIcon;
         let personIconClass="fa fa-user "+ styles.FontIcon;
+        let locationClass="fa fa-map-marker "+ styles.FontIcon;
 
         if(this.props.items.length>0){
             let userName=this.props.context.pageContext.user.displayName;
-            let locations:string = "";
             allItems = this.props.items.map(item=>(
                 <div className={styles.Feed}>
                     <div className={styles.DisplayLabel}>
@@ -56,8 +54,8 @@ class Display extends React.Component<IStoreProps,{}>{
                         </div>
                         <div className={styles.DisplayInfo}>
                             <div className={styles.DatePanel}><i className={dateIconClass}>{" "+GetFormattedDate(item.TrainingDate)}</i></div>
+                            <div className={styles.PersonPanel}>{item.Location!=null && item.Location.length>0 ?(<i className={locationClass}>{item.Location.length==1?item.Location.map(i=>(" "+i.Label)):item.Location.map(i=>(i.Label+","))}</i>):""}</div>
                             <div className={styles.PersonPanel}><i className={personIconClass}>{" "+item.Author.Title}</i></div>
-                            <div className={styles.PersonPanel}>{item.Location!=null && item.Location.length>0 ?(<i className={personIconClass}>{item.Location.length==1?item.Location.map(i=>(" "+i.Label)):item.Location.map(i=>(i.Label+","))}</i>):""}</div>
                         </div>
                     </div>
                 </div>
@@ -86,7 +84,7 @@ const GetFormattedDate = (createdDate:Date):string => {
     var date:Date = new Date(createdDate.toString());
     var month:number=date.getMonth()+1;
     var allMonths:string[] = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
-    return date.getDate() + "-" + allMonths[month+1] + "-" + date.getFullYear();
+    return date.getDate() + "-" + allMonths[month-1] + "-" + date.getFullYear();
 }
 
 const mapStateToProps = (state:IApplicationState) => {
