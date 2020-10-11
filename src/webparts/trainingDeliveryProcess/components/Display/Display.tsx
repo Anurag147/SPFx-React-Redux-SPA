@@ -33,7 +33,7 @@ class Display extends React.Component<IStoreProps,{}>{
 
     public render():React.ReactElement<IStoreProps>{
         let allItems = null;
-        let dateIconClass="fa fa-clock-o "+ styles.FontIcon;
+        let dateIconClass="fa fa-calendar "+ styles.FontIcon;
         let personIconClass="fa fa-user "+ styles.FontIcon;
         let locationClass="fa fa-map-marker "+ styles.FontIcon;
 
@@ -68,8 +68,10 @@ class Display extends React.Component<IStoreProps,{}>{
         return(
                     <div>
                         <div className={styles.ButtonPanel}>
-                            <input style={{height:'30px'}} type="text" onChange={(event)=>this.onSearchFieldChange(event)} className={styles.SearchTab} placeholder=" Search Event "></input>
-                            <button style={{marginLeft:'2px'}}  type="button" className="btn btn-danger" onClick={this.props.onAddData}>New Event</button>
+                            <input style={{height:'30px'}} type="text" onChange={(event)=>this.onSearchFieldChange(event)} className={styles.SearchTab} placeholder=" Search..."></input>
+                            <span onClick={this.props.onAddData} style={{cursor:'pointer'}}>
+                                <i style={{fontSize:'18px'}} className="fa fa-plus" aria-hidden="true"> ADD</i>
+                            </span> 
                         </div>
                         <div style={{height:'10px'}}>
 

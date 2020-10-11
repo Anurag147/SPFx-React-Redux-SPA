@@ -213,32 +213,32 @@ class Add extends React.Component<IAddFormProps , {}>{
             }
         return (       
             <div className={styles.Add}>
-                <div style={{backgroundColor:'#66cc99',height:'25px'}}>
+                <div style={{backgroundColor:'#4db8ff',height:'25px'}}>
                             <div className={styles.FeedTitle}>ADD EVENT</div>
                 </div>
                 <div className= "col-md-12" style={{backgroundColor:'white',border:'1px solid #e3e8e8'}}>
                 <div className="col-md-12" style={{marginTop:'10px'}}>
-                <div className="col-md-2">
+                <div className="col-md-3">
                     <label style={{fontWeight:'bold'}}>Title <label style={{color:'red'}}>*</label></label>
                 </div>
-                <div className="col-md-10">
+                <div className="col-md-9">
                     <input style={{width:'100%'}} type="text" onChange={(event)=>this.onFormFieldChange(event,"TITLE")} defaultValue={this.props.item.Title}></input>
                 </div>
             </div>
             <div className="col-md-12" style={{marginTop:'10px'}}>
-                <div className="col-md-2">
+                <div className="col-md-3">
                     <label style={{fontWeight:'bold'}}>Date <label style={{color:'red'}}>*</label></label>
                 </div>
-                <div className="col-md-10">
+                <div className="col-md-9">
                  {dateTag}
                 </div>
             </div>
 
             <div className="col-md-12" style={{marginTop:'10px'}}>
-                <div className="col-md-2">
+                <div className="col-md-3">
                     <label style={{fontWeight:'bold'}}>Location <label style={{color:'red'}}>*</label></label>
                 </div>
-                <div className="col-md-10">
+                <div className="col-md-9">
                 <TaxonomyPicker
                   allowMultipleSelections={true}
                   termsetNameOrID="FeedLocation"
@@ -253,21 +253,21 @@ class Add extends React.Component<IAddFormProps , {}>{
             </div>
 
             <div className="col-md-12" style={{marginTop:'10px'}}>
-                <div className="col-md-2">
+                <div className="col-md-3">
                     <label style={{fontWeight:'bold'}}>Description <label style={{color:'red'}}>*</label></label>
                 </div>
-                <div className="col-md-10">
+                <div className="col-md-9">
                     <textarea style={{minHeight:'200px',width:'100%'}} onChange={(event)=>this.onFormFieldChange(event,"DESC")} defaultValue={this.props.item.Description}></textarea>
                 </div>
             </div>
             <div className="col-md-12" style={{marginTop:'10px',marginBottom:'10px'}}>
-                <div className="col-md-2">
-                    <button type="button" className="btn btn-success" style={{marginLeft:'10px',marginTop:'5px'}} onClick={()=>{this._onSave(prvDate)}}>Submit</button>
+                <div className="col-md-3">
+                    <button type="button" className="btn btn-info" style={{marginLeft:'10px',marginTop:'5px'}} onClick={()=>{this._onSave(prvDate)}}>Submit</button>
                 </div>
-                <div className="col-md-2">
+                <div className="col-md-3">
                     <button type="button" className="btn btn-danger" style={{marginLeft:'10px',marginTop:'5px'}} onClick={()=>{this.onCancel()}}>Cancel</button>
                 </div>
-                <div className="col-md-8">
+                <div className="col-md-6">
                 </div>
             </div>  
             <div className="col-md-12" style={{marginTop:'10px',marginBottom:'10px'}}>

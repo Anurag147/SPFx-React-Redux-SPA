@@ -25,7 +25,6 @@
   margin-right:5%;
   width:90%;
   height:40px;
-  text-align:right;
   padding-top:10px;
  }
 
@@ -50,8 +49,8 @@
  }
 
  .DisplayLabel{
-  background-color:#66cc99;
-  height:25px
+  background-color:#4db8ff;
+  height:25px;
  }
 
  .DisplayInfo{
@@ -60,7 +59,7 @@
  }
 
  .DisplayPanel{
-  border: 1px solid #adebad;
+  border: 1px solid #e3e8e8;
  }
 
  .DescriptionPanel{
@@ -91,17 +90,9 @@
   border:1px solid #e3e8e8;
  }
 
-Input:focus{
-background-color: #9dff52; 
-}
-
-TextArea:focus{
-  background-color: #9dff52;
-  }
-
 .SearchTab{
   margin-right:20px;
-  width:200px;
+  width:80%;
   border-radius:5px
 }
 .SearchTab:focus{
@@ -116,7 +107,7 @@ TextArea:focus{
     border-radius: 10px;
     margin-bottom: 15px;
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 18px;
+    font-size: 15px;
     width: 90%;
   }
 
@@ -134,11 +125,11 @@ TextArea:focus{
     padding-bottom:10px;
     margin-left:5px;
     margin-right:5px;
-    font-size: 17px;
+    font-size: 15px;
  }
 
  .Loader {
-  color: #9dff52;
+  color: #4db8ff;
   font-size: 90px;
   text-indent: -9999em;
   overflow: hidden;
