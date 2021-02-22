@@ -87,6 +87,7 @@ export const trainingReducer:Reducer<IApplicationState> = (state: IApplicationSt
     }
     if(action.type==actionTypes.EVENT){
         let newState:IApplicationState = {...state};
+        newState.item = {...state.item};
         var data=action.data;
         if(data.field=="TITLE"){
             newState.item.Title=data.value;

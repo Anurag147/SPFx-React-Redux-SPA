@@ -172,6 +172,7 @@ class Add extends React.Component<IAddFormProps , {}>{
         );
       }
         public render():React.ReactElement<IAddFormProps>{
+            debugger;
             const iPickerTerm :IPickerTerms=[];
             if(this.props.item.Location!==null){
             this.props.item.Location.map(it=>(
